@@ -105,6 +105,7 @@ impl StylesheetFont {
     }
 
     pub fn available_fonts() -> Result<Vec<PathBuf>> {
+        let cjk_font_name = Self::cjk_font().path.file_name().map(PathBuf::from);
         Ok(fs::read_dir(ALLIUM_FONTS_DIR.as_path())?
             .filter_map(|entry| {
                 if let Err(e) = entry {
@@ -124,7 +125,11 @@ impl StylesheetFont {
                 if let Some(ext) = path.extension()
                     && (ext == "ttf" || ext == "otf" || ext == "ttc")
                 {
-                    return path.file_name().map(PathBuf::from);
+                    let file_name = path.file_name().map(PathBuf::from);
+                    if file_name == cjk_font_name {
+                        return None;
+                    }
+                    return file_name;
                 }
                 None
             })
