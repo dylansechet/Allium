@@ -113,10 +113,7 @@ impl Platform for MiyooPlatform {
     }
 
     fn set_volume(&mut self, volume: i32) -> Result<()> {
-        match self.model {
-            MiyooDeviceModel::Miyoo283 => Ok(()),
-            MiyooDeviceModel::Miyoo285 | MiyooDeviceModel::Miyoo354 => volume::set_volume(volume),
-        }
+        volume::set_volume(volume)
     }
 
     fn get_brightness(&self) -> Result<u8> {
